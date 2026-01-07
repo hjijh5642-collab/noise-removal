@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فك التشفير الاحترافي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- خط تجوال للعربية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-group {
+            transition: all 0.3s ease;
+        }
+        .input-group:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        /* Loading Animation */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 py-12">
+
+    <!-- الحاوية الرئيسية -->
+    <div class="w-full max-w-2xl glass-panel rounded-2xl shadow-2xl overflow-hidden relative">
+        
+        <!-- رأس البطاقة -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            <div class="relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4 backdrop-blur-sm shadow-lg">
+                    <i class="fas fa-unlock-keyhole text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold text-white mb-2">فك تشفير الصور الآمن</h1>
+                <p class="text-blue-100 text-sm font-medium opacity-90">استعد ذكرياتك المشفرة بضغطة زر واحدة</p>
+            </div>
+        </div>
+
+        <div class="p-8 pb-4">
+            <!-- قسم المدخلات -->
+            <div class="space-y-6">
+                
+                <!-- رفع الملف -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-400 mb-2 mr-1">1. صورة المشفرة (PNG)</label>
+                    <div class="relative input-group bg-dark-900 rounded-xl border-2 border-dark-700 overflow-hidden group hover:border-dark-700/80 transition-colors">
+                        <input type="file" id="imageInput" accept="image/png" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                        <div class="flex items-center p-4">
+                            <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 ml-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-image text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p id="fileNameDisplay" class="text-gray-300 font-medium truncate">اضغط لاختيار الصورة...</p>
+                                <p class="text-xs text-gray-500 mt-1">يدعم ملفات PNG فقط</p>
+                            </div>
+                            <div class="px-4 py-2 bg-dark-800 rounded-lg text-xs text-gray-400 border border-dark-700">تصفح</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- المفتاح -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-400 mb-2 mr-1">2. مفتاح فك التشفير</label>
+                    <div class="relative input-group bg-dark-900 rounded-xl border-2 border-dark-700 flex items-center overflow-hidden">
+                        <div class="pl-4 pr-4 text-yellow-500">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <input type="number" id="keyInput" value="2026" class="w-full bg-transparent p-4 text-white font-mono text-lg outline-none placeholder-gray-600" placeholder="أدخل الرقم السري">
+                    </div>
+                </div>
+
+                <!-- زر التشغيل -->
+                <button onclick="startDecryption()" id="actionBtn" class="w-full group relative overflow-hidden bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transform hover:-translate-y-1 transition-all duration-200">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                        بدء المعالجة
+                    </span>
+                </button>
+            </div>
+
+            <!-- حالة التحميل -->
+            <div id="loadingState" class="hidden flex-col items-center justify-center py-12 fade-in">
+                <div class="spinner mb-6"></div>
+                <p class="text-blue-300 font-medium animate-pulse">جاري تحليل ومعالجة البيكسلات...</p>
+                <p class="text-gray-500 text-xs mt-2">قد يستغرق هذا بضع ثوانٍ حسب دقة الصورة</p>
+            </div>
+
+            <!-- قسم النتيجة -->
+            <div id="resultSection" class="hidden mt-8 pt-8 border-t border-dark-700 fade-in">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20 text-green-400 mb-3">
+                        <i class="fas fa-check text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">تم استعادة الصورة بنجاح!</h3>
+                </div>
+                
+                <div class="bg-black rounded-xl border border-dark-700 overflow-hidden shadow-2xl mb-6 relative group">
+                    <canvas id="outputCanvas" class="w-full h-auto block max-h-[500px] object-contain mx-auto"></canvas>
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                        <p class="text-white font-bold"><i class="fas fa-search-plus ml-2"></i>معاينة</p>
+                    </div>
+                </div>
+
+                <button onclick="downloadImage()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 transition-colors mb-8">
+                    <i class="fas fa-download"></i>
+                    حفظ الصورة بجودة كاملة
+                </button>
+            </div>
+
+            <!-- الفوتر الجديد (المستطيلين) -->
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- المستطيل 1: كارت المطور -->
+                <div class="bg-dark-800/50 hover:bg-dark-800 border border-dark-700 hover:border-blue-500/30 rounded-xl p-3 flex items-center gap-3 transition-all duration-300 group cursor-default">
+                    <div class="w-12 h-12 bg-white rounded-lg p-1 flex-shrink-0 shadow-lg group-hover:scale-105 transition-transform">
+                        <img src="https://files.imagetourl.net/uploads/1767802033274-42a4ca72-b41c-4fb1-9b6e-86f8dc8bfc1f.png" 
+                            class="w-full h-full object-contain" alt="لوجو المطور">
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-blue-400 uppercase tracking-wider font-bold mb-0.5">تم التطوير بواسطة-فخر جزائري🇩🇿</p>
+                        <h4 class="text-white font-bold text-sm">A-Koda programer</h4>
+                    </div>
+                </div>
+
+                <!-- المستطيل 2: كارت المنتج/الموقع -->
+                <a href="https://gemini.google.com/share/0bfb2c11c3ea$0" class="block bg-dark-800/50 hover:bg-dark-800 border border-dark-700 hover:border-purple-500/30 rounded-xl p-3 relative overflow-hidden group transition-all duration-300">
+                    <!-- صورة خلفية باهتة للمنتج -->
+                    <div class="absolute inset-0 bg-[url('https://files.imagetourl.net/uploads/1767809532167-f67a0f04-daf4-41e1-a977-99de4bc22a11.png')] bg-cover bg-center opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                    
+                    <div class="relative z-10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 border border-purple-500/20 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-purple-400 uppercase tracking-wider font-bold mb-0.5">ولد صورتك</p>
+                                <h4 class="text-white font-bold text-sm">أعجبتك الصورة؟ اصنع خاصتك</h4>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-left text-gray-500 group-hover:text-white group-hover:-translate-x-1 transition-all"></i>
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Web Worker Logic (Same Logic, Optimized) -->
+    <script id="worker-code" type="javascript/worker">
+        self.onmessage = function(e) {
+            const { pixels, width, height, key } = e.data;
+            const numPixels = width * height;
+            
+            function mulberry32(a) {
+                return function() {
+                    var t = a += 0x6D2B79F5;
+                    t = Math.imul(t ^ t >>> 15, t | 1);
+                    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+                    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+                }
+            }
+
+            const indices = new Uint32Array(numPixels);
+            for (let i = 0; i < numPixels; i++) indices[i] = i;
+
+            const random = mulberry32(key);
+            for (let i = numPixels - 1; i > 0; i--) {
+                const j = Math.floor(random() * (i + 1));
+                const temp = indices[i];
+                indices[i] = indices[j];
+                indices[j] = temp;
+            }
+
+            const newPixels = new Uint8ClampedArray(numPixels * 4);
+            
+            for (let i = 0; i < numPixels; i++) {
+                const sourceIndex = indices[i];
+                const destIndex = i * 4;
+                const srcIdx = sourceIndex * 4;
+                
+                newPixels[destIndex] = pixels[srcIdx];
+                newPixels[destIndex + 1] = pixels[srcIdx + 1];
+                newPixels[destIndex + 2] = pixels[srcIdx + 2];
+                newPixels[destIndex + 3] = pixels[srcIdx + 3];
+            }
+
+            self.postMessage({ newPixels }, [newPixels.buffer]);
+        };
+    </script>
+
+    <script>
+        // Setup Worker
+        const workerBlob = new Blob([document.getElementById('worker-code').textContent], { type: "text/javascript" });
+        const workerUrl = URL.createObjectURL(workerBlob);
+        let worker = new Worker(workerUrl);
+
+        // Elements
+        const imageInput = document.getElementById('imageInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const keyInput = document.getElementById('keyInput');
+        const outputCanvas = document.getElementById('outputCanvas');
+        const ctx = outputCanvas.getContext('2d');
+        const loadingState = document.getElementById('loadingState');
+        const resultSection = document.getElementById('resultSection');
+        const actionBtn = document.getElementById('actionBtn');
+
+        let originalFileName = "decrypted_image";
+
+        // File Selection UI Update
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                fileNameDisplay.textContent = this.files[0].name;
+                fileNameDisplay.classList.add('text-white');
+                fileNameDisplay.classList.remove('text-gray-300');
+                resultSection.classList.add('hidden');
+            } else {
+                fileNameDisplay.textContent = "اضغط لاختيار الصورة...";
+                fileNameDisplay.classList.remove('text-white');
+                fileNameDisplay.classList.add('text-gray-300');
+            }
+        });
+
+        function startDecryption() {
+            if (!imageInput.files[0]) {
+                alert("من فضلك اختر الصورة أولاً");
+                return;
+            }
+            
+            loadingState.classList.remove('hidden');
+            loadingState.classList.add('flex');
+            resultSection.classList.add('hidden');
+            actionBtn.disabled = true;
+            actionBtn.innerHTML = '<span class="flex items-center justify-center gap-2"><i class="fas fa-spinner fa-spin"></i> جاري المعالجة...</span>';
+            actionBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const file = imageInput.files[0];
+            originalFileName = file.name.split('.')[0];
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    outputCanvas.width = img.width;
+                    outputCanvas.height = img.height;
+                    
+                    ctx.drawImage(img, 0, 0);
+                    const imgData = ctx.getImageData(0, 0, img.width, img.height);
+                    const pixels = imgData.data;
+                    const key = parseInt(keyInput.value);
+
+                    worker.terminate();
+                    worker = new Worker(workerUrl);
+
+                    worker.onmessage = function(e) {
+                        const restoredData = new ImageData(e.data.newPixels, img.width, img.height);
+                        ctx.putImageData(restoredData, 0, 0);
+                        
+                        loadingState.classList.add('hidden');
+                        loadingState.classList.remove('flex');
+                        resultSection.classList.remove('hidden');
+                        
+                        actionBtn.disabled = false;
+                        actionBtn.innerHTML = '<span class="relative z-10 flex items-center justify-center gap-2"><i class="fas fa-wand-magic-sparkles"></i> بدء المعالجة</span>';
+                        actionBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+
+                        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    };
+
+                    worker.postMessage({
+                        pixels: pixels,
+                        width: img.width,
+                        height: img.height,
+                        key: key
+                    });
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function downloadImage() {
+            outputCanvas.toBlob(function(blob) {
+                if (!blob) return alert("خطأ في إنشاء الملف");
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = originalFileName + "_restored.png";
+                link.href = url;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            }, 'image/png');
+        }
+    </script>
+</body>
+</html>
